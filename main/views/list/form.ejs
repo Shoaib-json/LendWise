@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loan Application Form</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    form {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #333;
+    }
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    .required::after {
+      content: " *";
+      color: #e74c3c;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 20px;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .form-row .form-group {
+      flex: 1 1 45%;
+    }
+    .note {
+      font-size: 14px;
+      color: #7f8c8d;
+      margin-top: 5px;
+    }
+    @media (max-width: 600px) {
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Loan Application Form</h1>
+  
+  <form action="http://localhost:8080/" method="POST" enctype="multipart/form-data">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="required" for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="required" for="age">Age</label>
+        <input type="number" id="age" name="age" min="18" required>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="required" for="occupation">Occupation</label>
+      <input type="text" id="occupation" name="occupation" required>
+    </div>
+
+    <div class="form-group">
+      <label class="required" for="proof">Proof (File)</label>
+      <input type="file" id="proof" name="proof" accept="image/*,application/pdf" required>
+      <p class="note">Please upload a valid ID proof document</p>
+    </div>
+
+    <div class="form-group">
+      <label class="required" for="reason">Reason</label>
+      <textarea id="reason" name="reason" required></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="required" for="asset">Asset</label>
+        <input type="text" id="asset" name="asset" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="required" for="asset_value">Asset Value</label>
+        <input type="number" id="asset_value" name="asset_value" min="0" step="0.01" required>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="required" for="address">Address</label>
+      <textarea id="address" name="address" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="required" for="loan_amount">Loan Amount</label>
+      <input type="number" id="loan_amount" name="loan_amount" min="0" step="0.01" required>
+    </div>
+
+    <div class="form-group">
+      <label for="nominee">Nominee (Optional)</label>
+      <input type="text" id="nominee" name="nominee">
+    </div>
+
+    <div class="form-group">
+      <label for="nominee_proof">Nominee Proof (Optional)</label>
+      <input type="file" id="nominee_proof" name="nominee_proof" accept="image/*,application/pdf">
+    </div>
+
+    <button type="submit">Submit Application</button>
+  </form>
+
+  <script>
+    // Basic client-side validation
+    document.querySelector('form').addEventListener('submit', function(e) {
+      const loanAmount = parseFloat(document.getElementById('loan_amount').value);
+      const assetValue = parseFloat(document.getElementById('asset_value').value);
+      
+      if (loanAmount > assetValue) {
+        e.preventDefault();
+        alert('Loan amount cannot exceed asset value');
+      }
+    });
+  </script>
+</body>
+</html>
