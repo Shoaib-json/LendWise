@@ -1,29 +1,24 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import axios from 'axios';
 
-export default (req: Request, res: Response, next: NextFunction) => {
+
+export default function auth(req: Request, res: Response, next: NextFunction) {
   const token = req.cookies?.token;
+  console.log("Middleware token:", token);
 
   if (!token) {
-    if (req.originalUrl === "http://localhost:3001/") {
-      return next();    
-    }
-    return axios.get("http://localhost:3001/")
+    console.log("No token, redirecting to login");
+    return res.redirect("http://localhost:3001/");
   }
 
   try {
     const decoded = jwt.verify(token, "Truck");
     (req as any).user = decoded;
-    next();
+    console.log("Token verified, user:", decoded);
+    return next();
   } catch (err: any) {
-    console.log("JWT verification failed:", err.message);
+    console.error("Invalid token:", err.message);
     res.clearCookie("token");
-
-    if (req.originalUrl === "/user/log") {
-      return next();
-    }
-
-    return res.redirect("/user/log");
+    return res.redirect("http://localhost:3001/");
   }
-};
+}

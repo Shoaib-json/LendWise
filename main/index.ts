@@ -1,30 +1,17 @@
 import express, { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import ejs from "ejs";
-import ejsMate from "ejs-mate";
+// import ejsMate from "ejs-mate";
 import path from "path";
-import { fileURLToPath } from 'url';
 import methodOverride from "method-override";
 import multer from "multer";
 import { storage } from "./cloudconfig";
-import connection from "./db.ts";
+import connection from "./db";
 import axios from "axios";
-import auth from "./middleware.ts";
+import auth from "./middleware";
 import cookieParser from "cookie-parser";
 
-// Fix for __dirname in ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
-// Extend Request interface to include user and date
-declare global {
-  namespace Express {
-    interface Request {
-      user?: any; // Replace with your actual user type
-      date?: Date;
-    }
-  }
-}
 
 dotenv.config();
 
@@ -32,13 +19,22 @@ const app = express();
 
 app.use(cookieParser());
 
-app.engine("ejs", ejsMate);
+// app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: any;
+      date?: Date;
+    }
+  }
+}
 
 const upload = multer({ storage });
 
@@ -49,17 +45,16 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 app.get("/", (req: Request, res: Response) => {
-  res.render("list/form");
+  res.render("form");
 });
 
 app.post(
-  "/",
-  auth,
+  "/",auth ,
   upload.fields([
     { name: "proof", maxCount: 1 },
     { name: "nominee_proof", maxCount: 1 },
   ]),
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     try {
       const {
         name,
@@ -73,9 +68,10 @@ app.post(
         loan_amount,
       } = req.body;
 
-      const proof = req.files?.["proof"]?.[0]?.path || null;
-      const nominee_proof = req.files?.["nominee_proof"]?.[0]?.path || null;
-      const id = req.user?.id; // Fixed: removed await since req.user is not a Promise
+      const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+      const proof = files?.["proof"]?.[0]?.path || null;
+      const nominee_proof = files?.["nominee_proof"]?.[0]?.path || null;
+      const id = req.user?.id;
 
       const requiredFields = [
         "name",
@@ -90,33 +86,35 @@ app.post(
 
       const missingFields = requiredFields.filter((field) => !req.body[field]);
       if (missingFields.length) {
-        return res.status(400).json({
+        res.status(400).json({
           error: `Missing required fields: ${missingFields.join(", ")}`,
         });
+        return;
       }
 
-      // Data Type Conversion and Validation
       const ageNum = Number(age);
       const assetValueNum = Number(asset_value);
       const loanAmountNum = Number(loan_amount);
 
       if (isNaN(ageNum) || isNaN(assetValueNum) || isNaN(loanAmountNum)) {
-        return res.status(400).json({ 
-          error: "Age, asset value, and loan amount must be numbers" 
+        res.status(400).json({
+          error: "Age, asset value, and loan amount must be numbers"
         });
+        return;
       }
 
       if (loanAmountNum > assetValueNum) {
-        return res.status(400).json({
+        res.status(400).json({
           error: "Loan amount cannot exceed asset value",
         });
+        return;
       }
 
       const query = `
         INSERT INTO borrower (
-          name, proof, age, occupation, reason, 
-          asset, asset_value, nominee, nominee_proof, 
-          address, loan_amount, id 
+          name, proof, age, occupation, reason,
+          asset, asset_value, nominee, nominee_proof,
+          address, loan_amount, id
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
@@ -137,17 +135,17 @@ app.post(
 
       console.log("Insert Query Values:", values);
 
-      // Database Operation
       connection.query(query, values, (err, result) => {
         if (err) {
           console.error("Database Error:", err);
-          return res.status(500).json({ error: "Database operation failed" });
+          res.status(500).json({ error: "Database operation failed" });
+          return;
         }
 
         console.log("Data Inserted Successfully:", result);
-        res.status(200).json({ 
-          message: "Application submitted successfully", 
-          result 
+        res.status(200).json({
+          message: "Application submitted successfully",
+          result
         });
       });
     } catch (error) {
@@ -156,6 +154,7 @@ app.post(
     }
   }
 );
+
 
 app.get("/pay", async (req: Request, res: Response) => {
   try {

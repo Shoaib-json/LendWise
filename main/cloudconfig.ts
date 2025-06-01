@@ -12,9 +12,12 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: {
-    folder: "Loan_App",
-    allowed_formats: ["png", "jpeg", "jpg", "pdf"],
+  params: async (req, file) => {
+    return {
+      folder: "Loan_App",
+      allowed_formats: ["png", "jpeg", "jpg", "pdf"],
+      resource_type: "auto",
+    };
   },
 });
 
