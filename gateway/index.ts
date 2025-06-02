@@ -1,11 +1,20 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response , NextFunction} from "express";
 import axios from "axios";
-import auth from "./middleware.ts"
+import auth from "./middleware"
 import cookieParser from 'cookie-parser';
 
 const app = express();
 
 app.use(cookieParser());
+
+declare global {
+  namespace Express {
+    interface Request {
+      date?: Date;
+    }
+  }
+}
+
 
 app.use((req : Request,res : Response,next : NextFunction)=>{
     req.date = new Date();
