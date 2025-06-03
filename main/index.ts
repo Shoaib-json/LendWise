@@ -45,7 +45,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 app.get("/", (req: Request, res: Response) => {
-  res.render("form");
+  try{
+    res.render("form");
+  }catch (err){
+    console.log(err)
+  }
+  
 });
 
 app.post(
