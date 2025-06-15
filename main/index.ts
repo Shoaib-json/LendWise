@@ -163,8 +163,7 @@ app.post(
 
 app.get("/pay", async (req: Request, res: Response) => {
   try {
-    const response = await axios.get("https://razorpay.me/@loaner");
-    res.status(200).json(response.data);
+    res.redirect("https://razorpay.me/@Loaner")
   } catch (error) {
     console.error("Error fetching data:", error);
     res.status(500).json({ message: "Internal Server Error" });
