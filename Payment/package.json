@@ -7,27 +7,19 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "Shoaib Akhtar Khan",
+  "author": "Shoaib Khan",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@prisma/client": "^6.9.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.5.0",
+    "body-parser": "^2.2.0",
     "express": "^5.1.0",
-    "helmet": "^8.1.0",
-    "morgan": "^1.10.0",
     "mysql2": "^3.14.1",
-    "prisma": "^6.9.0",
     "razorpay": "^2.9.6"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.19",
-    "@types/crypto-js": "^4.2.2",
     "@types/express": "^5.0.3",
-    "@types/node": "^24.0.1",
-    "nodemon": "^3.1.10",
-    "ts-node": "^10.9.2",
+    "@types/node": "^24.0.3",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
   }
 }

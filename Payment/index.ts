@@ -1,130 +1,94 @@
-import express, { Request, Response, RequestHandler } from 'express';
-import dotenv from 'dotenv';
-import mysql from 'mysql2/promise';
+import express, {Request , Response} from 'express';
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
-
-// Load environment variables
-dotenv.config();
+import mysql from 'mysql2';
+import bodyParser from 'body-parser';
+import db from "./Db";
 
 const app = express();
+app.use(bodyParser.json());
 
-// Parse raw body for webhook verification
-app.use('/webhook', express.raw({ type: 'application/json' }));
-// Parse JSON for other routes
-app.use(express.json());
 
-// Initialize Razorpay
+// Razorpay Setup
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
+  key_id: "rzp_test_64VOeX8TZ2yPkw",
+  key_secret: "ldhOaeGp2uAsIOM2nXc5z7dF"
 });
 
-// Setup MySQL connection pool
-const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT) || 3306,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-});
-
-// -------------------- ROUTES -------------------- //
-
-// Create order
-const createOrder: RequestHandler = async (req, res) => {
-  const { amount, currency = 'INR' } = req.body;
-  if (!amount || amount <= 0) return res.status(400).json({ error: 'Invalid amount' });
+// Create Razorpay Order & Save in DB
+app.post('/create-order', async (req :Request, res : Response) => {
+  const { amount, userId, loanId, currency = "INR" } = req.body;
 
   try {
-    const order = await razorpay.orders.create({
-      amount,
+    const options = {
+      amount: amount * 100, // in paise
       currency,
-      receipt: `rcpt_${Date.now()}`,
-      payment_capture: true,
-    });
+      receipt: `receipt_${Date.now()}`
+    };
+
+    const order = await razorpay.orders.create(options);
 
     await db.execute(
-      'INSERT INTO razorpay_transactions (order_id, amount, currency) VALUES (?, ?, ?)',
-      [order.id, order.amount, order.currency]
+      `INSERT INTO razorpay_transactions 
+        (id, loan_id, order_id, amount, currency, status) 
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [userId, loanId, order.id, amount, currency, 'created']
     );
 
-    return res.status(201).json({
-      orderId: order.id,
-      amount: order.amount,
-      currency: order.currency,
-      keyId: process.env.RAZORPAY_KEY_ID,
-    });
-  } catch (err: any) {
-    console.error('Order creation error:', err);
-    return res.status(500).json({ error: err.message });
+    res.json(order);
+  } catch (error) {
+    console.error("Error in order creation:", error);
+    res.status(500).json({ error: "Failed to create order" });
   }
-};
+});
 
-// Verify payment
-const verifyPayment: RequestHandler = async (req, res) => {
+// Verify Razorpay Payment & Update DB
+app.post('/verify-payment', (req: Request, res: Response) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
-  if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-    return res.status(400).json({ error: 'Missing payment details' });
-  }
+  const generatedSignature = crypto
+    .createHmac("sha256", "ldhOaeGp2uAsIOM2nXc5z7dF")
+    .update(razorpay_order_id + "|" + razorpay_payment_id)
+    .digest("hex");
 
-  const expectedSig = crypto
-    .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET!)
-    .update(`${razorpay_order_id}|${razorpay_payment_id}`)
-    .digest('hex');
+  const isAuthentic = generatedSignature === razorpay_signature;
 
-  const status = expectedSig === razorpay_signature ? 'paid' : 'failed';
-
-  await db.execute(
-    'UPDATE razorpay_transactions SET payment_id=?, signature=?, status=? WHERE order_id=?',
-    [razorpay_payment_id, razorpay_signature, status, razorpay_order_id]
-  );
-
-  if (status === 'failed') {
-    return res.status(400).json({ error: 'Invalid signature' });
-  }
-
-  return res.json({ success: true, orderId: razorpay_order_id });
-};
-
-// Webhook
-const handleWebhook: RequestHandler = async (req, res) => {
-  const signature = req.headers['x-razorpay-signature'] as string;
-  const payload = req.body as Buffer;
-
-  const expectedSig = crypto
-    .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET!)
-    .update(payload)
-    .digest('hex');
-
-  if (expectedSig !== signature) {
-    return res.status(400).end();
-  }
-
-  const event = JSON.parse(payload.toString());
-
-  if (event.event === 'payment.captured') {
-    const { order_id, payment_id } = event.payload.payment.entity;
-
-    await db.execute(
-      'UPDATE razorpay_transactions SET payment_id=?, status=? WHERE order_id=?',
-      [payment_id, 'paid', order_id]
+  if (!isAuthentic) {
+    db.execute(
+      `UPDATE razorpay_transactions SET status = ? WHERE order_id = ?`,
+      ['failed', razorpay_order_id],
+      (error) => {
+        if (error) {
+          console.error("Error updating failed status:", error);
+          return res.status(500).json({ error: "Database error" });
+        }
+        return res.status(400).json({ error: "Signature verification failed" });
+      }
     );
+    return;
   }
 
-  return res.status(200).end();
-};
+  db.execute(
+    `UPDATE razorpay_transactions 
+     SET payment_id = ?, signature = ?, status = ? 
+     WHERE order_id = ?`,
+    [razorpay_payment_id, razorpay_signature, 'paid', razorpay_order_id],
+    (error) => {
+      if (error) {
+        console.error("Error in verification:", error);
+        return res.status(500).json({ error: "Payment verification failed" });
+      }
+      res.json({ message: "Payment verified and saved in database." });
+    }
+  );
+});
 
-// -------------------- REGISTER ROUTES -------------------- //
+// Test Route
+app.get('/', (req : Request, res : Response) => {
+  res.send('Razorpay + MySQL Integration in TypeScript!');
+});
 
-app.post('/create-order', createOrder);
-app.post('/verify-payment', verifyPayment);
-app.post('/webhook', handleWebhook);
-
-// -------------------- START SERVER -------------------- //
-
-const PORT = process.env.PORT || 3000;
+const PORT = 5000;
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });

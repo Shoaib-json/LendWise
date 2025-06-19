@@ -1,41 +1,10 @@
 {
   "compilerOptions": {
-    /* Language and Environment */
-    "target": "es2022",                         // Use modern ECMAScript features
-    "lib": ["es2022"],                          // Include ES2022 library definitions
-
-    /* Modules */
-    "module": "node16",                         // Suitable for Node.js ESM
-    "moduleResolution": "node16",               // Modern module resolution
-    "esModuleInterop": true,                    // Interop for CommonJS modules
-    "resolveJsonModule": true,                  // Allow importing .json files
-    "allowSyntheticDefaultImports": true,       // Allow default imports from modules without them
-
-    /* Strict Type Checking */
-    "strict": true,                             // Enable all strict type checks
-    "noImplicitAny": true,                      // Prevent implicit 'any'
-    "strictNullChecks": true,                   // Enable null checks
-    "strictFunctionTypes": true,                // Enable strict function checks
-    "strictBindCallApply": true,                // Enable strict bind/call/apply
-    "noUnusedLocals": true,                     // Warn on unused locals
-    "noUnusedParameters": true,                 // Warn on unused parameters
-    "exactOptionalPropertyTypes": true,         // Optional props must match exactly
-
-    /* Emit Options */
-    "sourceMap": true,                          // Generate .map files
-    "outDir": "./dist",                         // Output compiled files to /dist
-    "removeComments": true,                     // Strip comments in output
-
-    /* Performance (Optional) */
-    "skipLibCheck": true,                       // Skip type checks in .d.ts files
-    "forceConsistentCasingInFileNames": true,   // Prevent casing issues
-    "incremental": true,                        // Enable faster builds (optional)
-    "tsBuildInfoFile": "./.tsbuildinfo"         // Store build info (used with incremental)
-    
-    /* Optional for library development */
-    // "declaration": true,                     // Generate .d.ts files
-    // "declarationMap": true                  // Source maps for .d.ts
-  },
-  "include": ["src/**/*"],                      // Include all files in /src
-  "exclude": ["node_modules", "dist", "test"]   // Exclude unnecessary folders
+    "target": "ES6",
+    "module": "commonjs",
+    "outDir": "dist",
+    "rootDir": ".",          // Change from "src" to "."
+    "esModuleInterop": true,
+    "strict": true
+  }
 }
