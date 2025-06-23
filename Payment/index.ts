@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import mysql from 'mysql2';
 import bodyParser from 'body-parser';
 import db from "./Db";
+import auth from "./middleware";
 
 const app = express();
 app.use(bodyParser.json());
@@ -16,7 +17,7 @@ const razorpay = new Razorpay({
 });
 
 // Create Razorpay Order & Save in DB
-app.post('/create-order', async (req :Request, res : Response) => {
+app.post('/create-order' , async (req :Request, res : Response) => {
   const { amount, userId, loanId, currency = "INR" } = req.body;
 
   try {
@@ -42,7 +43,7 @@ app.post('/create-order', async (req :Request, res : Response) => {
   }
 });
 
-// Verify Razorpay Payment & Update DB
+
 app.post('/verify-payment', (req: Request, res: Response) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 

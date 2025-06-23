@@ -2,8 +2,16 @@ import express, { Request, Response , NextFunction} from "express";
 import axios from "axios";
 import auth from "./middleware"
 import cookieParser from 'cookie-parser';
+import dotenv from "dotenv";
+
+dotenv.config({ path: '../.env' });
 
 const app = express();
+
+const port1 = process.env.GATEWAY_PORT;
+const port2 = process.env.MAIN_PORT ;
+const port3 = process.env.AUTH_PORT;
+const port4 = process.env.PAYMENT_PORT;
 
 app.use(cookieParser());
 
@@ -23,8 +31,11 @@ app.use((req : Request,res : Response,next : NextFunction)=>{
 });
 
 app.get("/" ,auth , async (req: Request, res: Response) => {
+    if(!port2){
+        console.log("error with the main port")
+    }
     try {
-        const response = await axios.get("http://localhost:8080/");
+        const response = await axios.get(`http://localhost:${port2}/`);
         
         res.set('Content-Type', response.headers['content-type']);
         res.send(response.data);
@@ -35,8 +46,11 @@ app.get("/" ,auth , async (req: Request, res: Response) => {
 });
 
 app.get("/auth", async (req: Request, res: Response) => {
+    if(!port3){
+        console.log("error with the auth port")
+    }
     try {
-        const response = await axios.get("http://localhost:3001/");
+        const response = await axios.get(`http://localhost:${port3}/`);
         
         // Forward content-type header and send raw response
         res.set('Content-Type', response.headers['content-type']);
@@ -49,7 +63,7 @@ app.get("/auth", async (req: Request, res: Response) => {
 
 app.get("/payment",auth , async (req: Request, res: Response) => {
     try {
-        const response = await axios.get("http://localhost:5000/");
+        const response = await axios.get(`http://localhost:${port4}/`);
         
         // Forward content-type header and send raw response
         res.set('Content-Type', response.headers['content-type']);
@@ -60,6 +74,7 @@ app.get("/payment",auth , async (req: Request, res: Response) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log("App is listening on port 3000");
+app.listen(port1, () => {
+    console.log("Main service running on port", process.env.GATEWAY_PORT);
+
 });

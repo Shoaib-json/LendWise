@@ -13,13 +13,14 @@ import cookieParser from "cookie-parser";
 
 
 
-dotenv.config();
+dotenv.config({ path: '../.env' });
 
 const app = express();
 
 app.use(cookieParser());
 
 // app.engine("ejs", ejsMate);
+app.set('view engine', 'pug');
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
@@ -161,15 +162,10 @@ app.post(
 );
 
 
-app.get("/pay", async (req: Request, res: Response) => {
-  try {
-    res.redirect("https://razorpay.me/@Loaner")
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
+app.get("/home" , (req : Request , res : Response)=>{
+  res.render("home");
+})
 
 app.listen(8080, () => {
-  console.log("App is listening at port 8080");
+  console.log("Main service running on port", process.env.MAIN_PORT);
 });
