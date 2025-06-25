@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import ejs from "ejs";
-// import ejsMate from "ejs-mate";
+
 import path from "path";
 import methodOverride from "method-override";
 import multer from "multer";
@@ -19,7 +19,7 @@ const app = express();
 
 app.use(cookieParser());
 
-// app.engine("ejs", ejsMate);
+
 app.set('view engine', 'pug');
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -27,6 +27,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
+
+
 
 declare global {
   namespace Express {
@@ -53,6 +55,7 @@ app.get("/", (req: Request, res: Response) => {
   }
   
 });
+
 
 app.post(
   "/",auth ,
@@ -164,6 +167,101 @@ app.post(
 
 app.get("/home" , (req : Request , res : Response)=>{
   res.render("home");
+})
+
+app.get("/work" , (req : Request , res : Response)=>{
+  res.render("working.ejs")
+});
+
+app.get("/investhelp" , (req : Request , res : Response)=>{
+  res.render("investor");
+})
+
+app.get("/investform" , (req : Request , res : Response)=>{
+    res.render("invest-form")
+});
+
+app.get("/account",(req :Request , res : Response)=>{
+  res.render("account")
+});
+
+app.post("/accountdetail" , (req : Request , res : Response)=>{
+ try{ let {
+    account,
+    bankName,
+    name,
+    ifscCode
+  } = req.body;
+
+  const id = req.user?.id;
+  const q = `INSERT INTO bankdetails (
+     account , bankName , name , ifscCode , id) 
+     VALUES (?,?,?,?,?)`;
+
+  const Values = [
+    account,
+    bankName,
+    name,
+    ifscCode,
+    id
+  ];
+
+  connection.query(q, Values ,(err , result) =>{
+    if(err){
+      console.log("DB Error");
+    }
+
+    console.log(result);
+  })
+  res.send("Done")
+}catch (err) {
+  console.log("something bad happended")
+}
+
+});
+
+app.post("/investor-test" ,auth ,(req : Request , res : Response)=>{
+
+ try{ 
+  const {
+    name,
+    contact,
+    risk
+  }= req.body;
+  
+  const contactNum = Number(contact);
+  const riskNum = Number(risk);
+   
+  const id = req.user?.id;
+
+  if(!id){
+    console.log("missing")
+  } 
+
+  const query = `INSERT INTO investor (
+  contact , name , risk , id) VALUES (
+  ?,?,?,?)`;
+
+  let Values = [
+    contactNum ,
+    name ,
+    riskNum,
+    id
+  ];
+
+  console.log(Values);
+
+  connection.query(query , Values , (err , result) =>{
+    if(err) {
+      console.log(err);
+      return res.status(500).json({ message: "Database error" });
+    }
+
+    console.log("Data Inserted Successfully" , result)
+  })
+}catch (err){
+  console.log(err)
+}
 })
 
 app.listen(8080, () => {
