@@ -181,8 +181,27 @@ app.get("/investform" , (req : Request , res : Response)=>{
     res.render("invest-form")
 });
 
-app.get("/account",(req :Request , res : Response)=>{
-  res.render("account")
+app.get("/dashboard", auth, async (req: Request, res: Response) => {
+  const id = req.user?.id;
+  if (!id) {
+    console.log("ID is not existed");
+  }
+  
+  const query = `SELECT * FROM borrower WHERE id = ?`;
+  const countQuery = `SELECT COUNT(*) AS count FROM borrower`;
+
+  try {
+    const [result] = await connection.promise().query(query, [id]) as any;
+    const [countResult] = await connection.promise().query(countQuery) as any;
+    
+    console.log(result);
+    const q = countResult[0].count;
+    console.log("Total count:", countResult[0].count);
+    
+    res.render("dash", {result , q});
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.post("/accountdetail" , (req : Request , res : Response)=>{

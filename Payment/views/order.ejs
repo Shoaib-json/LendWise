@@ -1,0 +1,375 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Public+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+
+    <title>LendWise - Make Payment</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  </head>
+  <body>
+    <div
+      class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden"
+      style='--select-button-svg: url(&apos;data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724px%27 height=%2724px%27 fill=%27rgb(104,117,130)%27 viewBox=%270 0 256 256%27%3e%3cpath d=%27M181.66,170.34a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-48-48a8,8,0,0,1,11.32-11.32L128,212.69l42.34-42.35A8,8,0,0,1,181.66,170.34Zm-96-84.68L128,43.31l42.34,42.35a8,8,0,0,0,11.32-11.32l-48-48a8,8,0,0,0-11.32,0l-48,48A8,8,0,0,0,85.66,85.66Z%27%3e%3c/path%3e%3c/svg%3e&apos;); font-family: "Public Sans", "Noto Sans", sans-serif;'
+    >
+      <div class="layout-container flex h-full grow flex-col">
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f1f2f4] px-10 py-3">
+          <div class="flex items-center gap-4 text-[#121417]">
+            <div class="size-4">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </div>
+            <h2 class="text-[#121417] text-lg font-bold leading-tight tracking-[-0.015em]">LendWise</h2>
+          </div>
+          <div class="flex flex-1 justify-end gap-8">
+            <div class="flex items-center gap-9">
+              <a class="text-[#121417] text-sm font-medium leading-normal" href="#">Browse Loans</a>
+              <a class="text-[#121417] text-sm font-medium leading-normal" href="#">My Loans</a>
+              <a class="text-[#121417] text-sm font-medium leading-normal" href="#">How it Works</a>
+              <a class="text-[#121417] text-sm font-medium leading-normal" href="#">Help</a>
+            </div>
+            <div
+              class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+              style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDefulrQlVm1d6wzuxNiuu3CHyR2nHQgAnvs_RanlpXChr3whDFd1QNzM51Fd3U6-4zHc3tH45mz8DUPzbAAhKTYEFW9EftPtSI_BIgKe9yUX4j7WPPQh1vDuOLTs7WCEvcOsMdhCBLG_6IqGE5AvAKqdScPvdvPgAMYPpvArhYEgkzJOAPwGZxuJE3kO_PkPW04c-eYSN7rRDLY_jspmvlyD-JZIUgeFcrjvv6qyOZBENFT3IBsLfzBwdexKDAJmWZtFYfRNKZpzA");'
+            ></div>
+          </div>
+        </header>
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col w-[512px] max-w-[512px] py-5 max-w-[960px] flex-1">
+            <div class="flex flex-wrap justify-between gap-3 p-4">
+              <p class="text-[#121417] tracking-light text-[32px] font-bold leading-tight min-w-72">Make a Payment</p>
+            </div>
+            
+            <!-- Success/Error Messages -->
+            <div id="messageContainer" class="hidden mx-4 mb-4 p-4 rounded-xl">
+              <div id="messageContent"></div>
+            </div>
+            
+            <form id="paymentForm">
+              <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <p class="text-[#121417] text-base font-medium leading-normal pb-2">Loan ID</p>
+                  <input
+                    id="loanId"
+                    name="loanId"
+                    required
+                    placeholder="Enter your loan ID"
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#121417] focus:outline-0 focus:ring-0 border-none bg-[#f1f2f4] focus:border-none h-14 placeholder:text-[#687582] p-4 text-base font-normal leading-normal"
+                  />
+                </label>
+              </div>
+              <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <p class="text-[#121417] text-base font-medium leading-normal pb-2">Payment Amount</p>
+                  <input
+                    id="paymentAmount"
+                    name="paymentAmount"
+                    type="number"
+                    step="0.01"
+                    min="1"
+                    required
+                    placeholder="Enter amount"
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#121417] focus:outline-0 focus:ring-0 border-none bg-[#f1f2f4] focus:border-none h-14 placeholder:text-[#687582] p-4 text-base font-normal leading-normal"
+                  />
+                </label>
+              </div>
+              <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <p class="text-[#121417] text-base font-medium leading-normal pb-2">Currency</p>
+                  <select
+                    id="currency"
+                    name="currency"
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#121417] focus:outline-0 focus:ring-0 border-none bg-[#f1f2f4] focus:border-none h-14 bg-[image:--select-button-svg] placeholder:text-[#687582] p-4 text-base font-normal leading-normal"
+                  >
+                    <option value="INR" selected>INR (Indian Rupee)</option>
+                    <option value="USD">USD (US Dollar)</option>
+                    <option value="EUR">EUR (Euro)</option>
+                  </select>
+                </label>
+              </div>
+            </form>
+            
+            <h3 class="text-[#121417] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Payment Details</h3>
+            <div class="p-4 grid grid-cols-[20%_1fr] gap-x-6">
+              <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#dde0e4] py-5">
+                <p class="text-[#687582] text-sm font-normal leading-normal">Total Amount Due</p>
+                <p class="text-[#121417] text-sm font-normal leading-normal">₹5,000</p>
+              </div>
+              <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#dde0e4] py-5">
+                <p class="text-[#687582] text-sm font-normal leading-normal">Outstanding Balance</p>
+                <p class="text-[#121417] text-sm font-normal leading-normal">₹2,500</p>
+              </div>
+              <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#dde0e4] py-5">
+                <p class="text-[#687582] text-sm font-normal leading-normal">Payment History</p>
+                <p class="text-[#121417] text-sm font-normal leading-normal cursor-pointer hover:underline">View</p>
+              </div>
+            </div>
+            
+            <h3 class="text-[#121417] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Payment Method</h3>
+            <div class="flex flex-wrap gap-3 p-4">
+              <label
+                class="text-sm font-medium leading-normal flex items-center justify-center rounded-xl border border-[#dde0e4] px-4 h-11 text-[#121417] has-[:checked]:border-[3px] has-[:checked]:px-3.5 has-[:checked]:border-[#c0d6ec] relative cursor-pointer"
+              >
+                UPI/Bank Transfer
+                <input type="radio" class="invisible absolute" name="paymentMethod" value="upi" checked />
+              </label>
+              <label
+                class="text-sm font-medium leading-normal flex items-center justify-center rounded-xl border border-[#dde0e4] px-4 h-11 text-[#121417] has-[:checked]:border-[3px] has-[:checked]:px-3.5 has-[:checked]:border-[#c0d6ec] relative cursor-pointer"
+              >
+                Credit/Debit Card
+                <input type="radio" class="invisible absolute" name="paymentMethod" value="card" />
+              </label>
+              <label
+                class="text-sm font-medium leading-normal flex items-center justify-center rounded-xl border border-[#dde0e4] px-4 h-11 text-[#121417] has-[:checked]:border-[3px] has-[:checked]:px-3.5 has-[:checked]:border-[#c0d6ec] relative cursor-pointer"
+              >
+                Net Banking
+                <input type="radio" class="invisible absolute" name="paymentMethod" value="netbanking" />
+              </label>
+            </div>
+            <p class="text-[#687582] text-sm font-normal leading-normal pb-3 pt-1 px-4">Your payment is secured with SSL encryption.</p>
+            
+            <!-- Loading Indicator -->
+            <div id="loadingIndicator" class="hidden px-4 py-3">
+              <div class="flex items-center justify-center">
+                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-[#121417]"></div>
+                <span class="ml-2 text-[#687582] text-sm">Processing...</span>
+              </div>
+            </div>
+            
+            <div class="flex px-4 py-3">
+              <button
+                id="submitPaymentBtn"
+                type="button"
+                class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 flex-1 bg-[#c0d6ec] text-[#121417] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#b0c6dc] transition-colors"
+              >
+                <span class="truncate">Submit Payment</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Wait for DOM to be fully loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        // Razorpay Configuration
+        const RAZORPAY_KEY = 'rzp_test_64VOeX8TZ2yPkw'; // Your test key
+        
+        // DOM Elements
+        const form = document.getElementById('paymentForm');
+        const submitBtn = document.getElementById('submitPaymentBtn');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const messageContainer = document.getElementById('messageContainer');
+        const messageContent = document.getElementById('messageContent');
+        
+        // Utility Functions
+        function showMessage(type, message) {
+          messageContainer.className = `mx-4 mb-4 p-4 rounded-xl ${
+            type === 'success' 
+              ? 'bg-green-50 border border-green-200' 
+              : 'bg-red-50 border border-red-200'
+          }`;
+          messageContent.innerHTML = `
+            <div class="flex items-center">
+              <span class="text-lg mr-2">${type === 'success' ? '✅' : '❌'}</span>
+              <span class="text-sm font-medium ${
+                type === 'success' ? 'text-green-800' : 'text-red-800'
+              }">${message}</span>
+            </div>
+          `;
+          messageContainer.classList.remove('hidden');
+          
+          // Auto hide success messages after 5 seconds
+          if (type === 'success') {
+            setTimeout(() => {
+              messageContainer.classList.add('hidden');
+            }, 5000);
+          }
+        }
+        
+        function hideMessage() {
+          messageContainer.classList.add('hidden');
+        }
+        
+        function showLoading() {
+          loadingIndicator.classList.remove('hidden');
+          submitBtn.disabled = true;
+          submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+        
+        function hideLoading() {
+          loadingIndicator.classList.add('hidden');
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+        
+        // Generate Order ID (in a real app, this would come from your backend)
+        function generateOrderId() {
+          const timestamp = Date.now();
+          const random = Math.floor(Math.random() * 1000);
+          return `order_${timestamp}_${random}`;
+        }
+        
+        // Mock Order Creation (replace with real API call)
+        async function createOrder(orderData) {
+          // Simulate API delay
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Mock order creation response
+          return {
+            id: generateOrderId(),
+            amount: orderData.amount * 100, // Convert to paise
+            currency: orderData.currency,
+            status: 'created',
+            receipt: `receipt_${Date.now()}`,
+            created_at: Math.floor(Date.now() / 1000)
+          };
+        }
+        
+        // Mock Payment Verification (replace with real API call)
+        async function verifyPayment(paymentData) {
+          // Simulate API delay
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Mock verification response
+          return {
+            success: true,
+            payment_id: paymentData.razorpay_payment_id,
+            order_id: paymentData.razorpay_order_id
+          };
+        }
+        
+        // Payment Handler
+        async function handlePayment() {
+          // Validate form
+          const formData = new FormData(form);
+          const loanId = formData.get('loanId');
+          const amount = parseFloat(formData.get('paymentAmount'));
+          const currency = formData.get('currency');
+          
+          if (!loanId || !amount || amount <= 0) {
+            showMessage('error', 'Please fill in all required fields with valid values.');
+            return;
+          }
+          
+          hideMessage();
+          showLoading();
+          
+          try {
+            // Check if Razorpay is loaded
+            if (typeof Razorpay === 'undefined') {
+              throw new Error('Razorpay library not loaded. Please refresh the page and try again.');
+            }
+            
+            // Step 1: Create Order
+            const orderData = {
+              loan_id: loanId,
+              amount: amount,
+              currency: currency
+            };
+            
+            const order = await createOrder(orderData);
+            
+            // Step 2: Open Razorpay Checkout
+            const options = {
+              key: RAZORPAY_KEY,
+              amount: order.amount,
+              currency: order.currency,
+              name: 'LendWise',
+              description: `Payment for Loan ID: ${loanId}`,
+              order_id: order.id,
+              handler: async function(response) {
+                try {
+                  showLoading();
+                  const verification = await verifyPayment(response);
+                  
+                  if (verification.success) {
+                    showMessage('success', `Payment successful! Payment ID: ${response.razorpay_payment_id}`);
+                    
+                    // Update button state
+                    submitBtn.innerHTML = '<span class="truncate">Payment Completed ✓</span>';
+                    submitBtn.classList.add('bg-green-100', 'text-green-800');
+                    submitBtn.disabled = true;
+                    
+                    // Reset form
+                    form.reset();
+                  } else {
+                    throw new Error('Payment verification failed');
+                  }
+                } catch (error) {
+                  showMessage('error', 'Payment verification failed. Please contact support.');
+                } finally {
+                  hideLoading();
+                }
+              },
+              prefill: {
+                name: 'Customer',
+                email: 'customer@example.com',
+                contact: '9999999999'
+              },
+              notes: {
+                loan_id: loanId
+              },
+              theme: {
+                color: '#c0d6ec'
+              },
+              modal: {
+                ondismiss: function() {
+                  hideLoading();
+                  showMessage('error', 'Payment was cancelled. Please try again.');
+                }
+              }
+            };
+            
+            const rzp = new Razorpay(options);
+            
+            rzp.on('payment.failed', function(response) {
+              hideLoading();
+              showMessage('error', `Payment failed: ${response.error.description}`);
+            });
+            
+            rzp.open();
+            
+          } catch (error) {
+            console.error('Payment error:', error);
+            showMessage('error', error.message || 'An error occurred while processing payment. Please try again.');
+          } finally {
+            hideLoading();
+          }
+        }
+        
+        // Event Listeners
+        submitBtn.addEventListener('click', handlePayment);
+        
+        // Form validation
+        form.addEventListener('input', function(e) {
+          hideMessage();
+        });
+        
+        // Initialize
+        console.log('LendWise Payment System Initialized');
+        
+        // Check if Razorpay script loaded properly
+        if (typeof Razorpay === 'undefined') {
+          showMessage('error', 'Payment system is not available. Please refresh the page.');
+        } else {
+          console.log('Razorpay loaded successfully');
+        }
+      });
+    </script>
+  </body>
+</html>

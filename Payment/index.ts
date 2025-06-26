@@ -5,10 +5,23 @@ import mysql from 'mysql2';
 import bodyParser from 'body-parser';
 import db from "./Db";
 import auth from "./middleware";
+import path from "path";
 
 const app = express();
 app.use(bodyParser.json());
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(express.urlencoded({ extended: true }));
 
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: any;
+      date?: Date;
+    }
+  }
+}
 
 // Razorpay Setup
 const razorpay = new Razorpay({
@@ -16,9 +29,16 @@ const razorpay = new Razorpay({
   key_secret: "ldhOaeGp2uAsIOM2nXc5z7dF"
 });
 
+
+app.get("/order" , (req :Request , res : Response)=>{
+  res.render("order")
+})
+
 // Create Razorpay Order & Save in DB
-app.post('/create-order' , async (req :Request, res : Response) => {
-  const { amount, userId, loanId, currency = "INR" } = req.body;
+app.post('/create-order'  , auth ,async (req :Request, res : Response) => {
+  const { amount, loan_id, currency = "INR" } = req.body;
+  const id = req.user?.id;
+  
 
   try {
     const options = {
@@ -33,7 +53,7 @@ app.post('/create-order' , async (req :Request, res : Response) => {
       `INSERT INTO razorpay_transactions 
         (id, loan_id, order_id, amount, currency, status) 
        VALUES (?, ?, ?, ?, ?, ?)`,
-      [userId, loanId, order.id, amount, currency, 'created']
+      [id, loan_id, order.id, amount, currency, 'created']
     );
 
     res.json(order);
