@@ -16,7 +16,7 @@
   <body>
     <div class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden" style='font-family: "Public Sans", "Noto Sans", sans-serif;'>
       <div class="layout-container flex h-full grow flex-col">
-        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f0f2f4] px-10 py-3">
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f0f2f5] px-10 py-3">
           <div class="flex items-center gap-4 text-[#111418]">
             <div class="size-4">
               <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,30 +28,27 @@
                 ></path>
               </svg>
             </div>
-            <h2 class="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em]">LendWise</h2>
+            <h2 class="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em]"><a href="/home">LendWise</a></h2>
           </div>
           <div class="flex flex-1 justify-end gap-8">
             <div class="flex items-center gap-9">
-              <a class="text-[#111418] text-sm font-medium leading-normal" href="#">Overview</a>
-              <a class="text-[#111418] text-sm font-medium leading-normal" href="#">Loans</a>
-              <a class="text-[#111418] text-sm font-medium leading-normal" href="#">Investments</a>
-              <a class="text-[#111418] text-sm font-medium leading-normal" href="#">Community</a>
+              <a class="text-[#111418] text-sm font-medium leading-normal" href="/work">How it works</a>
+              <a class="text-[#111418] text-sm font-medium leading-normal" href="/">Borrow</a>
+              <a class="text-[#111418] text-sm font-medium leading-normal" href="/investhelp">Invest</a>
+              <a class="text-[#111418] text-sm font-medium leading-normal" href="/dashboard">Dashboard</a>
             </div>
-            <button
-              class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 bg-[#f0f2f4] text-[#111418] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5"
-            >
-              <div class="text-[#111418]" data-icon="Bell" data-size="20px" data-weight="regular">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-                  <path
-                    d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216ZM48,184c7.7-13.24,16-43.92,16-80a64,64,0,1,1,128,0c0,36.05,8.28,66.73,16,80Z"
-                  ></path>
-                </svg>
-              </div>
-            </button>
-            <div
-              class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
-              style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD1b97MriNzXBA2UxUxPyA_ktjVkBjkyTf_6_Jb1vxmitQYa8EZdX44hQqcziWeo0p5fiYO_RbamLJilzv0II8jPOVhLRIeRBItoFgS_AxjSo8EKRBSwCUJYWjAjqkWTbwKJA8m_pkNondNkQ9mldz9LOclWJ6lqX8GOj4POMftQfvvqHxVtpvfX1Uw7SqFjfKbnswx7-TT-tlfPQjEeKoyZy_bZPQxBBza2irl1VgZjocSZ4rBaQzQ-M9Fjp5CG4Ty8RQhxYgDb_0");'
-            ></div>
+            <div class="flex gap-2">
+              <a href="/"
+                class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#0c7ff2] text-white text-sm font-bold leading-normal tracking-[0.015em]"
+              >
+                <span class="truncate">Apply Now</span>
+            </a>
+              <a href="http://localhost:3001/"
+                class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#f0f2f5] text-[#111418] text-sm font-bold leading-normal tracking-[0.015em]"
+              >
+                <span class="truncate">Log In</span>
+          </a>
+            </div>
           </div>
         </header>
         <div class="px-40 flex flex-1 justify-center py-5">

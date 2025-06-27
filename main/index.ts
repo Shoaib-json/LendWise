@@ -1,7 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import ejs from "ejs";
-
 import path from "path";
 import methodOverride from "method-override";
 import multer from "multer";
@@ -10,6 +9,7 @@ import connection from "./db";
 import axios from "axios";
 import auth from "./middleware";
 import cookieParser from "cookie-parser";
+import cors from "cors" ;
 
 
 
@@ -19,7 +19,7 @@ const app = express();
 
 app.use(cookieParser());
 
-
+app.use(cors());
 app.set('view engine', 'pug');
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -152,10 +152,7 @@ app.post(
         }
 
         console.log("Data Inserted Successfully:", result);
-        res.status(200).json({
-          message: "Application submitted successfully",
-          result
-        });
+        res.redirect("http://localhost:5000/create-order")
       });
     } catch (error) {
       console.error("Unexpected Error:", error);
@@ -281,6 +278,23 @@ app.post("/investor-test" ,auth ,(req : Request , res : Response)=>{
 }catch (err){
   console.log(err)
 }
+})
+
+app.get("/account" , (req : Request , res : Response)=>{
+  res.render("account")
+});
+
+app.get("/about" , (req :Request , res : Response)=>{
+  res.render("about")
+})
+
+
+app.get("/contact" , (req :Request , res : Response)=>{
+  res.render("contact")
+})
+
+app.get("/privacy" , (req :Request , res : Response)=>{
+  res.render("privacy")
 })
 
 app.listen(8080, () => {

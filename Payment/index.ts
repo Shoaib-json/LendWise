@@ -1,13 +1,15 @@
-import express, {Request , Response} from 'express';
+import express, {Request , Response , NextFunction} from 'express';
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
 import mysql from 'mysql2';
 import bodyParser from 'body-parser';
 import db from "./Db";
-import auth from "./middleware";
+import cookieParser from "cookie-parser";
+import auth from "./middleware"
 import path from "path";
 
 const app = express();
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -23,6 +25,12 @@ declare global {
   }
 }
 
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  req.date = new Date();
+  console.log(req.date, req.method, req.path);
+  next();
+});
 // Razorpay Setup
 const razorpay = new Razorpay({
   key_id: "rzp_test_64VOeX8TZ2yPkw",
@@ -30,14 +38,15 @@ const razorpay = new Razorpay({
 });
 
 
-app.get("/order" , (req :Request , res : Response)=>{
+app.get("/order" ,auth , (req :Request , res : Response)=>{
   res.render("order")
 })
 
 // Create Razorpay Order & Save in DB
-app.post('/create-order'  , auth ,async (req :Request, res : Response) => {
-  const { amount, loan_id, currency = "INR" } = req.body;
+app.post('/create-order' , auth ,async (req :Request, res : Response) => {
+  const { amount, loan_id , currency = "INR" } = req.body;
   const id = req.user?.id;
+  // const id = 6;
   
 
   try {

@@ -35,7 +35,7 @@ app.get("/" ,auth , async (req: Request, res: Response) => {
         console.log("error with the main port")
     }
     try {
-        const response = await axios.get(`http://localhost:${port2}/`);
+        const response = await axios.get(`http://localhost:${port2}/home`);
         
         res.set('Content-Type', response.headers['content-type']);
         res.send(response.data);
