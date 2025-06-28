@@ -47,6 +47,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
+app.use((req :Request , res : Response , next : NextFunction)=>{
+  res.locals.currUser = req.user || null;
+  console.log(req.user)
+  next();
+});
+
 app.get("/", (req: Request, res: Response) => {
   try{
     res.render("form");
