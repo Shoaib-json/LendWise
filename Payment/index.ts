@@ -31,6 +31,13 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   console.log(req.date, req.method, req.path);
   next();
 });
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.locals.currUser = req.cookies || null;
+  console.log(req.cookies);
+  next();
+});
+
 // Razorpay Setup
 const razorpay = new Razorpay({
   key_id: "rzp_test_64VOeX8TZ2yPkw",
@@ -44,7 +51,7 @@ app.get("/order" ,auth , (req :Request , res : Response)=>{
 
 // Create Razorpay Order & Save in DB
 app.post('/create-order' , auth ,async (req :Request, res : Response) => {
-  const { amount, loan_id , currency = "INR" } = req.body;
+  const { amount, currency = "INR" } = req.body;
   const id = req.user?.id;
   // const id = 6;
   
@@ -60,9 +67,9 @@ app.post('/create-order' , auth ,async (req :Request, res : Response) => {
 
     await db.execute(
       `INSERT INTO razorpay_transactions 
-        (id, loan_id, order_id, amount, currency, status) 
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [id, loan_id, order.id, amount, currency, 'created']
+        (id, order_id, amount, currency, status) 
+       VALUES (?, ?, ?, ?, ?)`,
+      [id, order.id, amount, currency, 'created']
     );
 
     res.json(order);

@@ -1,7 +1,7 @@
 // router/mainroutes.ts
 import { Router } from "express";
 import { HomeController, BorrowerController, InvestorController, BankController } from "../controller/controller";
-import auth from "../middleware";
+import auth from "../utils/middleware";
 import multer from "multer";
 import { storage } from "../cloudconfig";
 
@@ -9,7 +9,7 @@ const router = Router();
 const upload = multer({ storage });
 
 // Home routes
-router.get("/", HomeController.renderForm);
+router.get("/",auth , HomeController.renderForm);
 router.get("/home", HomeController.renderHome);
 router.get("/work", HomeController.renderWork);
 router.get("/about", HomeController.renderAbout);
@@ -27,7 +27,7 @@ router.get("/dashboard", auth, BorrowerController.getDashboard);
 
 // Investor routes
 router.get("/investhelp", InvestorController.renderInvestorHelp);
-router.get("/investform", InvestorController.renderInvestorForm);
+router.get("/investform",auth , InvestorController.renderInvestorForm);
 router.post("/investor-test", auth, InvestorController.createInvestor);
 
 // Bank routes

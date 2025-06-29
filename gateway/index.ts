@@ -19,10 +19,16 @@ declare global {
   namespace Express {
     interface Request {
       date?: Date;
+      user?: any; // Add this for the auth middleware
     }
   }
 }
 
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.locals.currUser = req.cookies?.token || null;
+  console.log(req.cookies?.token);
+  next();
+});
 
 app.use((req : Request,res : Response,next : NextFunction)=>{
     req.date = new Date();
@@ -35,8 +41,22 @@ app.get("/" , async (req: Request, res: Response) => {
         console.log("error with the main port")
     }
     try {
-        const response = await axios.get(`http://localhost:8080/home`);
+        const headers: any = {};
         
+        // Forward the original cookie header
+        if (req.headers.cookie) {
+            headers.cookie = req.headers.cookie;
+        }
+        
+        // Forward user token as a custom header
+        if (req.cookies?.token) {
+            headers['x-user-token'] = req.cookies.token;
+        }
+
+        const response = await axios.get(`http://localhost:${port2}/home`, {
+            headers: headers
+        });
+                 
         res.set('Content-Type', response.headers['content-type']);
         res.send(response.data);
     } catch (error) {
@@ -51,7 +71,7 @@ app.get("/auth", async (req: Request, res: Response) => {
     }
     try {
         const response = await axios.get(`http://localhost:${port3}/`);
-        
+                 
         // Forward content-type header and send raw response
         res.set('Content-Type', response.headers['content-type']);
         res.send(response.data);
@@ -64,7 +84,7 @@ app.get("/auth", async (req: Request, res: Response) => {
 app.get("/payment",auth , async (req: Request, res: Response) => {
     try {
         const response = await axios.get(`http://localhost:${port4}/`);
-        
+                 
         // Forward content-type header and send raw response
         res.set('Content-Type', response.headers['content-type']);
         res.send(response.data);
@@ -76,5 +96,4 @@ app.get("/payment",auth , async (req: Request, res: Response) => {
 
 app.listen(3000, () => {
     console.log("gateway service running on port", process.env.GATEWAY_PORT);
-
 });

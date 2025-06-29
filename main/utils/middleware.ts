@@ -15,6 +15,7 @@ export default function auth(req: Request, res: Response, next: NextFunction) {
     const decoded = jwt.verify(token, "Truck");
     (req as any).user = decoded;
     console.log("Token verified, user:", decoded);
+    req.flash('error', 'Logged in successfully');
     return next();
   } catch (err: any) {
     console.error("Invalid token:", err.message);
