@@ -30,12 +30,12 @@ app.use((req : Request,res : Response,next : NextFunction)=>{
     next();
 });
 
-app.get("/" ,auth , async (req: Request, res: Response) => {
+app.get("/" , async (req: Request, res: Response) => {
     if(!port2){
         console.log("error with the main port")
     }
     try {
-        const response = await axios.get(`http://localhost:${port2}/home`);
+        const response = await axios.get(`http://localhost:8080/home`);
         
         res.set('Content-Type', response.headers['content-type']);
         res.send(response.data);
@@ -74,7 +74,7 @@ app.get("/payment",auth , async (req: Request, res: Response) => {
     }
 });
 
-app.listen(port1, () => {
-    console.log("Main service running on port", process.env.GATEWAY_PORT);
+app.listen(3000, () => {
+    console.log("gateway service running on port", process.env.GATEWAY_PORT);
 
 });

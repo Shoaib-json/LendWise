@@ -77,7 +77,7 @@ app.get("/login" , (req : Request , res :Response)=>{
 })  
 
 app.post('/create', (req: Request, res: Response) => {
-  const { email, password, username } = req.body;
+  try{const { email, password, username } = req.body;
 
   bcrypt.genSalt(12, (err, salt) => {
     if (err) return res.status(500).json({ message: 'Server error' });
@@ -88,19 +88,21 @@ app.post('/create', (req: Request, res: Response) => {
       const query = 'INSERT INTO USER (email, username, password) VALUES (?, ?, ?)';
       const values = [email, username, hash];
 
-      connection.query(query, values, (err) => {
-        if (err) return res.status(500).json({ message: 'Database error' });
-        axios.get("http://localhost:3000/")
+      connection.query(query, values, async (err) => {
+        if (err) return res.status(404).json({ message: 'Database error' });
+        await axios.get("http://localhost:3000/")
       });
     });
   });
+} catch (axiosError : any) {
+    console.warn(axiosError )
+  }
 });
 
 app.get("/oauth", (req: Request, res: Response): void => {
   const token = req.cookies.token;
-
   console.log("Received token from cookie:", token);
-
+  
   if (!token) {
     console.log("No token provided");
     res.status(401).send('Unauthorized: No token provided');
@@ -110,9 +112,9 @@ app.get("/oauth", (req: Request, res: Response): void => {
   try {
     const decoded = jwt.verify(token, 'Truck') as { email?: string };
     const email = decoded.email;
-
+    
     console.log("Decoded token payload:", decoded);
-
+    
     if (!email) {
       console.log("Email not found in decoded token");
       res.status(401).send('Unauthorized: Email not found in token');
@@ -128,45 +130,42 @@ app.get("/oauth", (req: Request, res: Response): void => {
       }
 
       if (userResults.length === 0) {
-        console.log(`No user found with email: ${email}`);
-        res.status(404).json({ message: 'User does not exist' });
-        return;
+        res.render("oauth.ejs", { email });
+      } else {
+        const user = userResults[0];
+        console.log("User found:", user);
+
+        const loanQuery = 'SELECT loan_id FROM borrower WHERE id = ?';
+        connection.query(loanQuery, [user.id], (err, loanResults: any[]) => {
+          if (err) {
+            console.error("Loan query error:", err);
+            res.status(500).json({ message: 'Server error in loan query' });
+            return;
+          }
+
+          const payload: any = {
+            id: user.id,
+            email,
+            username: user.username
+          };
+
+          if (loanResults.length > 0) {
+            payload.loan_id = loanResults[0].loan_id;
+            console.log("Loan found for user:", loanResults[0]);
+          } else {
+            console.log("No loan found for user");
+          }
+
+          const newToken = jwt.sign(payload, 'Truck', { expiresIn: '1h' });
+          console.log("New JWT payload:", payload);
+
+          res.cookie('token', newToken, { httpOnly: true, secure: false });
+          console.log("JWT cookie set. Redirecting...");
+
+          res.redirect('http://localhost:3000/');
+        });
       }
-
-      const user = userResults[0];
-      console.log("User found:", user);
-
-      const loanQuery = 'SELECT loan_id FROM borrower WHERE id = ?';
-      connection.query(loanQuery, [user.id], (err, loanResults: any[]) => {
-        if (err) {
-          console.error("Loan query error:", err);
-          res.status(500).json({ message: 'Server error in loan query' });
-          return;
-        }
-
-        const payload: any = {
-          id: user.id,
-          email,
-          username: user.username
-        };
-
-        if (loanResults.length > 0) {
-          payload.loan_id = loanResults[0].loan_id;
-          console.log("Loan found for user:", loanResults[0]);
-        } else {
-          console.log("No loan found for user");
-        }
-
-        const newToken = jwt.sign(payload, 'Truck', { expiresIn: '1h' });
-        console.log("New JWT payload:", payload);
-
-        res.cookie('token', newToken, { httpOnly: true, secure: false });
-        console.log("JWT cookie set. Redirecting...");
-
-        res.redirect('http://localhost:3000/');
-      });
     });
-
   } catch (err) {
     console.error("Token verification failed:", err);
     res.status(401).send('Unauthorized: Invalid token');

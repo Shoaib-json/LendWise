@@ -9,7 +9,7 @@
     />
 
     <title>LendWise</title>
-    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+    <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill="white"/></svg>' />
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   </head>
@@ -32,10 +32,10 @@
           </div>
           <div class="flex flex-1 justify-end gap-8">
             <div class="flex items-center gap-9">
-              <a class="text-[#111418] text-sm font-medium leading-normal" href="/work">How it works</a>
-              <a class="text-[#111418] text-sm font-medium leading-normal" href="/">Borrow</a>
-              <a class="text-[#111418] text-sm font-medium leading-normal" href="/investhelp">Invest</a>
-              <a class="text-[#111418] text-sm font-medium leading-normal" href="/dashboard">Dashboard</a>
+              <a class="text-[#111418] text-sm font-medium leading-normal" href="http://localhost:8080/work">How it works</a>
+              <a class="text-[#111418] text-sm font-medium leading-normal" href="http://localhost:8080/">Borrow</a>
+              <a class="text-[#111418] text-sm font-medium leading-normal" href="http://localhost:8080/investhelp">Invest</a>
+              <a class="text-[#111418] text-sm font-medium leading-normal" href="http://localhost:8080/dashboard">Dashboard</a>
             </div>
             <div class="flex gap-2">
               <a href="/"
@@ -43,11 +43,13 @@
               >
                 <span class="truncate">Apply Now</span>
             </a>
+            <% if (!currUser){%>
               <a href="http://localhost:3001/"
                 class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#f0f2f5] text-[#111418] text-sm font-bold leading-normal tracking-[0.015em]"
               >
                 <span class="truncate">Log In</span>
           </a>
+          <%}%>
             </div>
           </div>
         </header>
@@ -73,9 +75,9 @@
                     <button
                       class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#0c7ff2] text-white text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
                     >
-                      <a href="/"><span class="truncate">Borrow</span></a>
+                      <a href="http://localhost:8080/"><span class="truncate">Borrow</span></a>
                     </button>
-                    <a href="/investhelp"
+                    <a href="http://localhost:8080/investhelp"
                       class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#f0f2f5] text-[#111418] text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
                     >
                       <span class="truncate">Invest</span>
@@ -183,25 +185,22 @@
                 <p class="text-[#60758a] text-base font-normal leading-normal">Funds are disbursed directly to your account.</p>
               </div>
             </div>
-            <h2 class="text-[#111418] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Testimonials</h2>
+            <h2 class="text-[#111418] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-5">Testimonials</h2>
             <div class="flex overflow-y-auto [-ms-scrollbar-style:none] [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden">
               <div class="flex items-stretch p-4 gap-3">
                 <div class="flex h-full flex-1 flex-col gap-4 rounded-lg min-w-40">
-                  <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg flex flex-col"></div>
                   <div>
                     <p class="text-[#111418] text-base font-medium leading-normal">Sarah M.</p>
                     <p class="text-[#60758a] text-sm font-normal leading-normal">"LendWise provided me with a quick and easy loan process. Highly recommend!"</p>
                   </div>
                 </div>
                 <div class="flex h-full flex-1 flex-col gap-4 rounded-lg min-w-40">
-                  <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg flex flex-col"></div>
                   <div>
                     <p class="text-[#111418] text-base font-medium leading-normal">David L.</p>
                     <p class="text-[#60758a] text-sm font-normal leading-normal">"Investing through LendWise has been a great experience. The returns are impressive."</p>
                   </div>
                 </div>
                 <div class="flex h-full flex-1 flex-col gap-4 rounded-lg min-w-40">
-                  <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg flex flex-col"></div>
                   <div>
                     <p class="text-[#111418] text-base font-medium leading-normal">Emily R.</p>
                     <p class="text-[#60758a] text-sm font-normal leading-normal">"I was able to secure a loan with favorable terms thanks to LendWise."</p>
@@ -221,7 +220,7 @@
                 </div>
                 <div class="flex flex-1 justify-center">
                   <div class="flex justify-center">
-                    <a href="/"
+                    <a href="http://localhost:8080/work"
                       class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#0c7ff2] text-white text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em] grow"
                     >
                       <span class="truncate">Get Started</span>
@@ -236,9 +235,9 @@
           <div class="flex max-w-[960px] flex-1 flex-col">
             <footer class="flex flex-col gap-6 px-5 py-10 text-center @container">
               <div class="flex flex-wrap items-center justify-center gap-6 @[480px]:flex-row @[480px]:justify-around">
-                <a class="text-[#60758a] text-base font-normal leading-normal min-w-40" href="/about">About Us</a>
-                <a class="text-[#60758a] text-base font-normal leading-normal min-w-40" href="/contact">Contact</a>
-                <a class="text-[#60758a] text-base font-normal leading-normal min-w-40" href="/privacy">Privacy Policy</a>
+                <a class="text-[#60758a] text-base font-normal leading-normal min-w-40" href="http://localhost:8080/about">About Us</a>
+                <a class="text-[#60758a] text-base font-normal leading-normal min-w-40" href="http://localhost:8080/contact">Contact</a>
+                <a class="text-[#60758a] text-base font-normal leading-normal min-w-40" href="http://localhost:8080/privacy">Privacy Policy</a>
               </div>
              <div class="flex flex-wrap justify-center gap-4">
               <a href="https://www.linkedin.com/in/shoaib-khan-178212243/">
@@ -266,5 +265,3 @@
         </footer>
       </div>
     </div>
-  </body>
-</html>
