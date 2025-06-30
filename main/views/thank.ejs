@@ -43,71 +43,34 @@
               >
                 <span class="truncate">Apply Now</span>
             </a>
-            
+            <% if (!currUser){%>
+              <a href="http://localhost:3001/"
+                class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#f0f2f5] text-[#111418] text-sm font-bold leading-normal tracking-[0.015em]"
+              >
+                <span class="truncate">Log In</span>
+          </a>
+          <%}%>
             </div>
           </div>
         </header>
-        <form action="http://localhost:3001/login" method="post" id="loginForm">
-  <div class="px-40 flex flex-1 justify-center py-5">
-    <div class="layout-content-container flex flex-col w-[512px] max-w-[512px] py-5 max-w-[960px] flex-1">
-      <h2 class="text-[#121417] tracking-light text-[28px] font-bold leading-tight px-4 text-center pb-3 pt-5">Welcome back</h2>
-
-      <!-- Email input -->
-      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-        <label class="flex flex-col min-w-40 flex-1">
-          <p class="text-[#121417] text-base font-medium leading-normal pb-2">Email</p>
-          <input name="email" type="email" required
-            class="form-input flex w-full rounded-xl border border-[#dde0e4] h-14 p-[15px] placeholder:text-[#687582]" placeholder="Email" />
-        </label>
-      </div>
-
-      <!-- Password input -->
-      <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-        <label class="flex flex-col min-w-40 flex-1">
-          <p class="text-[#121417] text-base font-medium leading-normal pb-2">Password</p>
-          <input name="password" type="password" required
-            class="form-input flex w-full rounded-xl border border-[#dde0e4] h-14 p-[15px] placeholder:text-[#687582]" placeholder="Password" />
-        </label>
-      </div>
-
-      <div class="flex px-4 py-3">
-        <button type="submit"
-          class="submit-btn flex flex-1 items-center justify-center rounded-full h-10 bg-[#4a89c9] text-white text-sm font-bold">
-          <span class="truncate">Submit</span>
-        </button>
-      </div>
-
-      <!-- Loader spinner -->
-      <div id="loader" class="flex justify-center mt-4 hidden">
-        <div class="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-blue-500"></div>
-        <p class="ml-2 text-sm text-[#687582]">Logging in...</p>
-      </div>
-
-      <p class="text-[#687582] text-sm text-center pt-4">Or</p>
-
-      <!-- Google Login -->
-      <div class="flex px-4 py-3">
-        <a href="http://localhost:3001/auth/google"
-          class="flex flex-1 items-center justify-center rounded-full h-10 bg-[#f1f2f4] text-[#121417] text-sm font-bold">
-          Sign in with Google
-        </a>
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col w-[512px] max-w-[512px] py-5 max-w-[960px] flex-1">
+            <div class="w-full" style="height: 100px;"></div>
+            <h2 class="text-[#161212] tracking-light text-[28px] font-bold leading-tight px-4 text-center pb-3 pt-5">Thank you for your submission!</h2>
+            <p class="text-[#161212] text-base font-normal leading-normal pb-3 pt-1 px-4 text-center">
+              Your information has been received. Our team will review it and contact you shortly.
+            </p>
+            <div class="flex px-4 py-3 justify-center">
+              <a href="http://localhost:8080/home"
+                class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#f3dcdc] text-[#161212] text-sm font-bold leading-normal tracking-[0.015em]"
+              >
+                <span class="truncate">Back to homepage</span>
+            </a>
+            </div>
+            <div class="w-full" style="height: 100px;"></div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</form>
-
-      </div>
-    </div>
-    <script>
-  const form = document.getElementById('loginForm');
-  const loader = document.getElementById('loader');
-
-  form.addEventListener('submit', () => {
-    loader.classList.remove('hidden'); // Show loader
-    form.querySelector('.submit-btn').disabled = true; // Disable button
-  });
-</script>
   </body>
-  
 </html>
-

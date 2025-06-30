@@ -54,6 +54,7 @@
             </div>
           </div>
         </header>
+        <form action="http://localhost:8080/contact" method="post">
         <div class="px-40 flex flex-1 justify-center py-5">
           <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
             <div class="flex flex-wrap justify-between gap-3 p-4">
@@ -68,7 +69,7 @@
                 <input
                   placeholder="Enter your name"
                   class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#121417] focus:outline-0 focus:ring-0 border border-[#dde0e4] bg-white focus:border-[#dde0e4] h-14 placeholder:text-[#687582] p-[15px] text-base font-normal leading-normal"
-                  value=""
+                  name="name"
                 />
               </label>
             </div>
@@ -78,7 +79,7 @@
                 <input
                   placeholder="Enter your email address"
                   class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#121417] focus:outline-0 focus:ring-0 border border-[#dde0e4] bg-white focus:border-[#dde0e4] h-14 placeholder:text-[#687582] p-[15px] text-base font-normal leading-normal"
-                  value=""
+                  name="email"
                 />
               </label>
             </div>
@@ -88,7 +89,7 @@
                 <input
                   placeholder="Enter the subject of your message"
                   class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#121417] focus:outline-0 focus:ring-0 border border-[#dde0e4] bg-white focus:border-[#dde0e4] h-14 placeholder:text-[#687582] p-[15px] text-base font-normal leading-normal"
-                  value=""
+                  name="subject"
                 />
               </label>
             </div>
@@ -98,7 +99,7 @@
                 <textarea
                   placeholder="Enter your message"
                   class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#121417] focus:outline-0 focus:ring-0 border border-[#dde0e4] bg-white focus:border-[#dde0e4] min-h-36 placeholder:text-[#687582] p-[15px] text-base font-normal leading-normal"
-                ></textarea>
+                 name="message"></textarea>
               </label>
             </div>
             <div class="flex px-4 py-3 justify-start">
@@ -115,6 +116,7 @@
             <p class="text-[#121417] text-base font-normal leading-normal pb-3 pt-1 px-4">You can also connect with me on LinkedIn: <a href="https://www.linkedin.com/in/shoaib-khan-178212243/">LinkedIn</a></p>
             <p class="text-[#121417] text-base font-normal leading-normal pb-3 pt-1 px-4">Explore more of my work on my Github: <a href="https://github.com/Shoaib-json/">Github</a></p>
           </div>
+          </form>
         </div>
         <footer class="flex justify-center">
           <div class="flex max-w-[960px] flex-1 flex-col">

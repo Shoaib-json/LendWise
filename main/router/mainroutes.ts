@@ -9,11 +9,13 @@ const router = Router();
 const upload = multer({ storage });
 
 // Home routes
-router.get("/",auth , HomeController.renderForm);
+router.get("/", HomeController.renderHelp);
+router.get("/form",auth , HomeController.renderForm);
 router.get("/home", HomeController.renderHome);
 router.get("/work", HomeController.renderWork);
 router.get("/about", HomeController.renderAbout);
 router.get("/contact", HomeController.renderContact);
+router.post("/contact" , HomeController.getContact)
 router.get("/privacy", HomeController.renderPrivacy);
 
 // Borrower routes
@@ -31,7 +33,8 @@ router.get("/investform",auth , InvestorController.renderInvestorForm);
 router.post("/investor-test", auth, InvestorController.createInvestor);
 
 // Bank routes
-router.get("/account", BankController.renderAccount);
+router.get("/account", auth ,BankController.renderAccount);
 router.post("/accountdetail", auth, BankController.createBankDetails);
+
 
 export default router;

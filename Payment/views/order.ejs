@@ -91,13 +91,6 @@
               >
                 <span class="truncate">Apply Now</span>
             </a>
-            <% if (!currUser){%>
-              <a href="http://localhost:3001/"
-                class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#f0f2f5] text-[#111418] text-sm font-bold leading-normal tracking-[0.015em]"
-              >
-                <span class="truncate">Log In</span>
-          </a>
-          <%}%>
             </div>
           </div>
         </header>
@@ -194,8 +187,8 @@
 
  <script>
   let currentOrder = null;
-  const API_ENDPOINT = '/create-order';
-  const VERIFY_ENDPOINT = '/verify-payment';
+  const API_ENDPOINT = 'http://localhost:3000/create-order';
+  const VERIFY_ENDPOINT = 'http://localhost:3000/verify-payment';
   const RAZORPAY_KEY = 'rzp_test_64VOeX8TZ2yPkw';
 
   const form = document.getElementById('createOrderForm');

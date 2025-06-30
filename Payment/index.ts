@@ -45,7 +45,7 @@ const razorpay = new Razorpay({
 });
 
 
-app.get("/order" ,auth , (req :Request , res : Response)=>{
+app.get("/order" , (req :Request , res : Response)=>{
   res.render("order")
 })
 

@@ -1,8 +1,6 @@
-create table bankdetails (
-    id int,
+create table contact (
     name varchar(50) not null,
-    bankName varchar(50) not null,
-    account varchar(80),
-    ifscCode varchar(50),
-    FOREIGN KEY (id) REFERENCES user(id)
+    email varchar(50) not null,
+    subject varchar(100),
+    message varchar(1500)
 );

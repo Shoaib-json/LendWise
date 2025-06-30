@@ -3,6 +3,7 @@ import axios from "axios";
 import auth from "./middleware"
 import cookieParser from 'cookie-parser';
 import dotenv from "dotenv";
+import path from 'path'
 
 dotenv.config({ path: '../.env' });
 
@@ -14,6 +15,8 @@ const port3 = process.env.AUTH_PORT;
 const port4 = process.env.PAYMENT_PORT;
 
 app.use(cookieParser());
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 declare global {
   namespace Express {
@@ -83,7 +86,7 @@ app.get("/auth", async (req: Request, res: Response) => {
 
 app.get("/payment",auth , async (req: Request, res: Response) => {
     try {
-        const response = await axios.get(`http://localhost:${port4}/`);
+        const response = await axios.get(`http://localhost:${port4}/order`);
                  
         // Forward content-type header and send raw response
         res.set('Content-Type', response.headers['content-type']);
@@ -92,6 +95,12 @@ app.get("/payment",auth , async (req: Request, res: Response) => {
         console.error("Error fetching data:", error);
         res.status(500).send("Error fetching data");
     }
+});
+
+
+app.all('/{*any}', (req: Request, res: Response, next: NextFunction) => {
+  res.render("errorPage")
+  next();
 });
 
 app.listen(3000, () => {
