@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node_modules/.bin/tsc -p gateway/tscconfig.json",
+    "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js"
   },
   "keywords": [],
