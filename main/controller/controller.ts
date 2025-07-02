@@ -3,6 +3,11 @@ import { Request, Response, NextFunction } from "express";
 import connection from "../db";
 import AppError from "../utils/AppError";
 import { catchAsync } from "../utils/catchAsync";
+import dotenv from 'dotenv';
+
+dotenv.config({path : '../.env'})
+
+const port4 = process.env.PAYMENT_PORT;
 
 declare global {
   namespace Express {
@@ -228,7 +233,7 @@ export class InvestorController {
     try {
       const [result] = await connection.promise().query(query, values);
       console.log("Data Inserted Successfully", result);
-      res.redirect("http://localhost:5000/order");
+      res.redirect(`http://localhost:${port4}/order`);
     } catch (error) {
       console.error("Database Error:", error);
       return next(new AppError("Failed to create investor", 500));

@@ -1,9 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
-import dotenv from 'dotenv';
-import jwt from 'jsonwebtoken';
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
+dotenv.config({path :'../.env'});
 const port = process.env.AUTH_PORT;
-
 
 export default function auth(req: Request, res: Response, next: NextFunction) {
   const token = req.cookies?.token;
@@ -11,20 +11,18 @@ export default function auth(req: Request, res: Response, next: NextFunction) {
 
   if (!token) {
     console.log("No token, redirecting to login");
-    return res.redirect(`http://localhost:${port}`);
+    return res.redirect(`http://localhost:${port}/`);
   }
-  const secret = process.env.COOKIE_SECRET;
-    if (!secret) {
-  throw new Error("COOKIE_SECRET is not defined");
-  }
+
   try {
+    const secret = process.env.COOKIE_SECRET as string;
     const decoded = jwt.verify(token, secret);
-    (req as any).user = decoded;
+    req.user = decoded;
     console.log("Token verified, user:", decoded);
     return next();
   } catch (err: any) {
     console.error("Invalid token:", err.message);
     res.clearCookie("token");
-    return res.redirect(`http://localhost:${port}`);
+    return res.redirect(`http://localhost:${port}/`);
   }
 }

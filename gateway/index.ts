@@ -103,6 +103,6 @@ app.all('/{*any}', (req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.listen(3000, () => {
+app.listen(port1, () => {
     console.log("gateway service running on port", process.env.GATEWAY_PORT);
 });

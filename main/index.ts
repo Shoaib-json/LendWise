@@ -75,7 +75,7 @@ app.all('/{*any}', (req: Request, res: Response, next: NextFunction) => {
 // Global error handling middleware - must be last
 app.use(globalErrorHandler);
 
-const PORT = process.env.MAIN_PORT || 3000;
+const PORT = process.env.MAIN_PORT ;
 
 app.listen(PORT, () => {
   console.log(`Main service running on port ${PORT}`);

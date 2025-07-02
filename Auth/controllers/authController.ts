@@ -2,6 +2,16 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import connection from '../db';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: '../.env' });
+
+const jwtSecret = process.env.COOKIE_SECRET as string;
+const port1 = process.env.GATEWAY_PORT;
+const port2 = process.env.MAIN_PORT;
+const port3 = process.env.AUTH_PORT;
+const port4 = process.env.PAYMENT_PORT;
+const saltRounds = parseInt(process.env.salt || '12', 10); 
 
 export const renderSignIn = (req: Request, res: Response) => {
   res.render('signIn');
@@ -14,7 +24,7 @@ export const renderLogin = (req: Request, res: Response) => {
 export const registerUser = (req: Request, res: Response) => {
   const { email, password, username } = req.body;
 
-  bcrypt.genSalt(12, (err, salt) => {
+  bcrypt.genSalt(saltRounds, (err, salt) => {
     if (err) return res.status(500).send('Error generating salt');
 
     bcrypt.hash(password, salt, (err, hash) => {
@@ -23,7 +33,7 @@ export const registerUser = (req: Request, res: Response) => {
       const query = 'INSERT INTO USER (email, username, password) VALUES (?, ?, ?)';
       connection.query(query, [email, username, hash], (err) => {
         if (err) return res.status(500).send('Database error');
-        res.redirect('http://localhost:3000/');
+        res.redirect(`http://localhost:${port1}/`);
       });
     });
   });
@@ -40,9 +50,9 @@ export const loginUser = (req: Request, res: Response) => {
     bcrypt.compare(password, user.password, (err, match) => {
       if (!match) return res.status(401).send('Invalid credentials');
 
-      const token = jwt.sign({ id: user.id, email }, 'Truck', { expiresIn: '1h' });
+      const token = jwt.sign({ id: user.id, email }, jwtSecret, { expiresIn: '1h' });
       res.cookie('token', token, { httpOnly: true });
-      res.redirect('http://localhost:3000/');
+      res.redirect(`http://localhost:${port1}/`);
     });
   });
 };
@@ -55,7 +65,7 @@ export const handleOAuth = (req: Request, res: Response): void => {
   }
 
   try {
-    const decoded = jwt.verify(token, 'Truck') as { email?: string };
+    const decoded = jwt.verify(token, jwtSecret) as { email?: string };
     const email = decoded.email;
 
     const userQuery = 'SELECT id, username FROM user WHERE email = ?';
@@ -88,9 +98,9 @@ export const handleOAuth = (req: Request, res: Response): void => {
           payload.loan_id = loanResults[0].loan_id;
         }
 
-        const newToken = jwt.sign(payload, 'Truck', { expiresIn: '1h' });
+        const newToken = jwt.sign(payload, jwtSecret, { expiresIn: '1h' });
         res.cookie('token', newToken, { httpOnly: true });
-        res.redirect('http://localhost:3000/');
+        res.redirect(`http://localhost:${port1}/`);
       });
     });
   } catch (err) {
@@ -100,7 +110,7 @@ export const handleOAuth = (req: Request, res: Response): void => {
 
 export const googleCallback = (req: Request, res: Response) => {
   const user = req.user as any;
-  const token = jwt.sign(user, 'Truck', { expiresIn: '1h' });
+  const token = jwt.sign(user, jwtSecret, { expiresIn: '1h' });
   res.cookie('token', token, { httpOnly: true });
   res.redirect('/oauth');
 };
