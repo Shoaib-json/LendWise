@@ -2,5 +2,5 @@
 .env
 .env.*
 
-# Ignore all views folders recursively
-**/views/
+
+
