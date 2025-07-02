@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -28,9 +19,8 @@ app.use((0, cookie_parser_1.default)());
 app.set('view engine', 'ejs');
 app.set('views', path_1.default.join(__dirname, 'views'));
 app.use((req, res, next) => {
-    var _a, _b;
-    res.locals.currUser = ((_a = req.cookies) === null || _a === void 0 ? void 0 : _a.token) || null;
-    console.log((_b = req.cookies) === null || _b === void 0 ? void 0 : _b.token);
+    res.locals.currUser = req.cookies?.token || null;
+    console.log(req.cookies?.token);
     next();
 });
 app.use((req, res, next) => {
@@ -38,8 +28,7 @@ app.use((req, res, next) => {
     console.log(req.date, req.method, req.path);
     next();
 });
-app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+app.get("/", async (req, res) => {
     if (!port2) {
         console.log("error with the main port");
     }
@@ -50,10 +39,10 @@ app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             headers.cookie = req.headers.cookie;
         }
         // Forward user token as a custom header
-        if ((_a = req.cookies) === null || _a === void 0 ? void 0 : _a.token) {
+        if (req.cookies?.token) {
             headers['x-user-token'] = req.cookies.token;
         }
-        const response = yield axios_1.default.get(`http://localhost:${port2}/home`, {
+        const response = await axios_1.default.get(`http://localhost:${port2}/home`, {
             headers: headers
         });
         res.set('Content-Type', response.headers['content-type']);
@@ -63,13 +52,13 @@ app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         console.error("Error fetching data:", error);
         res.status(500).send("Error fetching data");
     }
-}));
-app.get("/auth", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+app.get("/auth", async (req, res) => {
     if (!port3) {
         console.log("error with the auth port");
     }
     try {
-        const response = yield axios_1.default.get(`http://localhost:${port3}/`);
+        const response = await axios_1.default.get(`http://localhost:${port3}/`);
         // Forward content-type header and send raw response
         res.set('Content-Type', response.headers['content-type']);
         res.send(response.data);
@@ -78,10 +67,10 @@ app.get("/auth", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         console.error("Error fetching data:", error);
         res.status(500).send("Error fetching data");
     }
-}));
-app.get("/payment", middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+app.get("/payment", middleware_1.default, async (req, res) => {
     try {
-        const response = yield axios_1.default.get(`http://localhost:${port4}/order`);
+        const response = await axios_1.default.get(`http://localhost:${port4}/order`);
         // Forward content-type header and send raw response
         res.set('Content-Type', response.headers['content-type']);
         res.send(response.data);
@@ -90,11 +79,11 @@ app.get("/payment", middleware_1.default, (req, res) => __awaiter(void 0, void 0
         console.error("Error fetching data:", error);
         res.status(500).send("Error fetching data");
     }
-}));
+});
 app.all('/{*any}', (req, res, next) => {
     res.render("errorPage");
     next();
 });
-app.listen(3000, () => {
+app.listen(port1, () => {
     console.log("gateway service running on port", process.env.GATEWAY_PORT);
 });

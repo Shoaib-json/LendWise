@@ -1,0 +1,12 @@
+# Tell GitHub that .ejs files should not be counted in language statistics
+*.ejs linguist-detectable=false
+
+
+
+# Ensure TypeScript files are properly detected
+*.ts linguist-language=TypeScript
+*.tsx linguist-language=TypeScript
+
+# If you have other template files that shouldn't be counted
+*.hbs linguist-detectable=false
+*.handlebars linguist-detectable=false

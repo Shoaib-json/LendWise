@@ -1,0 +1,173 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Public+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+
+    <title>LendWise</title>
+    <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill="white"/></svg>' />
+
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  </head>
+  <body>
+    <div class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden" style='font-family: "Public Sans", "Noto Sans", sans-serif;'>
+      <div class="layout-container flex h-full grow flex-col">
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f0f2f5] px-10 py-3">
+          <div class="flex items-center gap-4 text-[#111418]">
+            <div class="size-4">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </div>
+            <h2 class="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em]"><a href="/home">LendWise</a></h2>
+          </div>
+          <div class="flex flex-1 justify-end gap-8">
+            <div class="flex items-center gap-9">
+              <a class="text-[#111418] text-sm font-medium leading-normal" href="http://localhost:8080/work">How it works</a>
+              <a class="text-[#111418] text-sm font-medium leading-normal" href="http://localhost:8080/">Borrow</a>
+              <a class="text-[#111418] text-sm font-medium leading-normal" href="http://localhost:8080/investhelp">Invest</a>
+              <a class="text-[#111418] text-sm font-medium leading-normal" href="http://localhost:8080/dashboard">Dashboard</a>
+            </div>
+            <div class="flex gap-2">
+              <a href="/"
+                class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#0c7ff2] text-white text-sm font-bold leading-normal tracking-[0.015em]"
+              >
+                <span class="truncate">Apply Now</span>
+            </a>
+            <% if (!currUser){%>
+              <a href="http://localhost:3001/"
+                class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#f0f2f5] text-[#111418] text-sm font-bold leading-normal tracking-[0.015em]"
+              >
+                <span class="truncate">Log In</span>
+          </a>
+          <%}%>
+            </div>
+          </div>
+        </header>
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+            <div class="flex flex-wrap justify-between gap-3 p-4">
+              <div class="flex min-w-72 flex-col gap-3">
+                <p class="text-[#111518] tracking-light text-[32px] font-bold leading-tight">Invest in Loans</p>
+                <p class="text-[#617689] text-sm font-normal leading-normal">
+                  Earn attractive returns by investing in a diverse portfolio of loans. LendWise connects you directly with borrowers, offering transparency and control over your
+                  investments.
+                </p>
+              </div>
+            </div>
+            <h2 class="text-[#111518] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">How Investing Works</h2>
+            <div class="grid grid-cols-[40px_1fr] gap-x-2 px-4">
+              <div class="flex flex-col items-center gap-1 pt-3">
+                <div class="text-[#111518]" data-icon="MagnifyingGlass" data-size="24px" data-weight="regular">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                    <path
+                      d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+                    ></path>
+                  </svg>
+                </div>
+                <div class="w-[1.5px] bg-[#dbe1e6] h-2 grow"></div>
+              </div>
+              <div class="flex flex-1 flex-col py-3">
+                <p class="text-[#111518] text-base font-medium leading-normal">Browse Loans</p>
+                <p class="text-[#617689] text-base font-normal leading-normal">Explore a wide range of loans with detailed borrower profiles and risk assessments.</p>
+              </div>
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-[1.5px] bg-[#dbe1e6] h-2"></div>
+                <div class="text-[#111518]" data-icon="ListBullets" data-size="24px" data-weight="regular">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                    <path
+                      d="M80,64a8,8,0,0,1,8-8H216a8,8,0,0,1,0,16H88A8,8,0,0,1,80,64Zm136,56H88a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Zm0,64H88a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16ZM44,52A12,12,0,1,0,56,64,12,12,0,0,0,44,52Zm0,64a12,12,0,1,0,12,12A12,12,0,0,0,44,116Zm0,64a12,12,0,1,0,12,12A12,12,0,0,0,44,180Z"
+                    ></path>
+                  </svg>
+                </div>
+                <div class="w-[1.5px] bg-[#dbe1e6] h-2 grow"></div>
+              </div>
+              <div class="flex flex-1 flex-col py-3">
+                <p class="text-[#111518] text-base font-medium leading-normal">Select Your Investments</p>
+                <p class="text-[#617689] text-base font-normal leading-normal">Choose loans that align with your investment strategy and risk tolerance.</p>
+              </div>
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-[1.5px] bg-[#dbe1e6] h-2"></div>
+                <div class="text-[#111518]" data-icon="Wallet" data-size="24px" data-weight="regular">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                    <path
+                      d="M216,72H56a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H56A24,24,0,0,0,32,64V192a24,24,0,0,0,24,24H216a16,16,0,0,0,16-16V88A16,16,0,0,0,216,72Zm0,128H56a8,8,0,0,1-8-8V86.63A23.84,23.84,0,0,0,56,88H216Zm-48-60a12,12,0,1,1,12,12A12,12,0,0,1,168,140Z"
+                    ></path>
+                  </svg>
+                </div>
+                <div class="w-[1.5px] bg-[#dbe1e6] h-2 grow"></div>
+              </div>
+              <div class="flex flex-1 flex-col py-3">
+                <p class="text-[#111518] text-base font-medium leading-normal">Fund Your Account</p>
+                <p class="text-[#617689] text-base font-normal leading-normal">Securely transfer funds to your LendWise account to start investing.</p>
+              </div>
+              <div class="flex flex-col items-center gap-1 pb-3">
+                <div class="w-[1.5px] bg-[#dbe1e6] h-2"></div>
+                <div class="text-[#111518]" data-icon="CurrencyDollar" data-size="24px" data-weight="regular">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                    <path
+                      d="M152,120H136V56h8a32,32,0,0,1,32,32,8,8,0,0,0,16,0,48.05,48.05,0,0,0-48-48h-8V24a8,8,0,0,0-16,0V40h-8a48,48,0,0,0,0,96h8v64H104a32,32,0,0,1-32-32,8,8,0,0,0-16,0,48.05,48.05,0,0,0,48,48h16v16a8,8,0,0,0,16,0V216h16a48,48,0,0,0,0-96Zm-40,0a32,32,0,0,1,0-64h8v64Zm40,80H136V136h16a32,32,0,0,1,0,64Z"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="flex flex-1 flex-col py-3">
+                <p class="text-[#111518] text-base font-medium leading-normal">Earn Returns</p>
+                <p class="text-[#617689] text-base font-normal leading-normal">Receive monthly payments of principal and interest, and track your portfolio's performance.</p>
+              </div>
+            </div>
+            <div class="flex px-4 py-3 justify-center">
+              <a href="/investform"
+                class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-5 bg-[#278dec] text-white text-base font-bold leading-normal tracking-[0.015em]"
+              >
+                <span class="truncate">Invest Now</span>
+            </a>
+            </div>
+          </div>
+        </div>
+       <footer class="flex justify-center">
+          <div class="flex max-w-[960px] flex-1 flex-col">
+            <footer class="flex flex-col gap-6 px-5 py-10 text-center @container">
+              <div class="flex flex-wrap items-center justify-center gap-6 @[480px]:flex-row @[480px]:justify-around">
+                <a class="text-[#60758a] text-base font-normal leading-normal min-w-40" href="/about">About Us</a>
+                <a class="text-[#60758a] text-base font-normal leading-normal min-w-40" href="/contact">Contact</a>
+                <a class="text-[#60758a] text-base font-normal leading-normal min-w-40" href="/privacy">Privacy Policy</a>
+              </div>
+             <div class="flex flex-wrap justify-center gap-4">
+              <a href="https://www.linkedin.com/in/shoaib-khan-178212243/">
+              <div class="text-[#60758a]" data-icon="LinkedInLogo" data-size="24px" data-weight="regular">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+               <path
+                   d="M216,24H40A16,16,0,0,0,24,40V216a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V40A16,16,0,0,0,216,24Zm0,192H40V40H216V216ZM96,112v64a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Zm88,28v36a8,8,0,0,1-16,0V140a20,20,0,0,0-40,0v36a8,8,0,0,1-16,0V112a8,8,0,0,1,15.79-1.78A36,36,0,0,1,184,140ZM100,84A12,12,0,1,1,88,72,12,12,0,0,1,100,84Z"
+                ></path>
+                  </svg>
+                </div>
+              </a>
+        <a href="https://github.com/Shoaib-json">
+        <div class="text-[#60758a]" data-icon="GithubLogo" data-size="24px" data-weight="regular">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+            <path
+          d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H108A59.75,59.75,0,0,0,60,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,40,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,80,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40h8v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,200,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM184,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h16.36a8,8,0,0,0,6.71-3.69,43.88,43.88,0,0,1,32.32-20.06A43.81,43.81,0,0,1,176,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,184,104Z"
+        ></path>
+      </svg>
+    </div>
+  </a>
+</div>
+              <p class="text-[#60758a] text-base font-normal leading-normal">@2024 LendWise. All rights reserved.</p>
+            </footer>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
